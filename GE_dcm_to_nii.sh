@@ -157,171 +157,171 @@ function RPI_orient() {
   #echo "native orientation = ${native_orient}"
 
   if [ "${native_orient}" != "RPI" ]; then
-    
+
     case ${native_orient} in
 
     #L PA IS
-    LPI) 
+    LPI)
       flipFlag="-x y z"
       ;;
-    LPS) 
+    LPS)
       flipFlag="-x y -z"
       ;;
-    LAI) 
+    LAI)
       flipFlag="-x -y z"
       ;;
-    LAS) 
+    LAS)
       flipFlag="-x -y -z"
       ;;
 
     #R PA IS
-    RPS) 
+    RPS)
       flipFlag="x y -z"
       ;;
-    RAI) 
+    RAI)
       flipFlag="x -y z"
       ;;
-    RAS) 
+    RAS)
       flipFlag="x -y -z"
       ;;
 
     #L IS PA
-    LIP) 
+    LIP)
       flipFlag="-x z y"
       ;;
-    LIA) 
+    LIA)
       flipFlag="-x -z y"
       ;;
-    LSP) 
+    LSP)
       flipFlag="-x z -y"
       ;;
-    LSA) 
+    LSA)
       flipFlag="-x -z -y"
       ;;
 
     #R IS PA
-    RIP) 
+    RIP)
       flipFlag="x z y"
       ;;
-    RIA) 
+    RIA)
       flipFlag="x -z y"
       ;;
-    RSP) 
+    RSP)
       flipFlag="x z -y"
       ;;
-    RSA) 
+    RSA)
       flipFlag="x -z -y"
       ;;
 
     #P IS LR
-    PIL) 
+    PIL)
       flipFlag="-z x y"
       ;;
-    PIR) 
+    PIR)
       flipFlag="z x y"
       ;;
-    PSL) 
+    PSL)
       flipFlag="-z x -y"
       ;;
-    PSR) 
+    PSR)
       flipFlag="z x -y"
       ;;
 
     #A IS LR
-    AIL) 
+    AIL)
       flipFlag="-z -x y"
       ;;
-    AIR) 
+    AIR)
       flipFlag="z -x y"
       ;;
-    ASL) 
+    ASL)
       flipFlag="-z -x -y"
       ;;
-    ASR) 
+    ASR)
       flipFlag="z -x -y"
       ;;
 
     #P LR IS
-    PLI) 
+    PLI)
       flipFlag="-y x z"
       ;;
-    PLS) 
+    PLS)
       flipFlag="-y x -z"
       ;;
-    PRI) 
+    PRI)
       flipFlag="y x z"
       ;;
-    PRS) 
+    PRS)
       flipFlag="y x -z"
       ;;
 
     #A LR IS
-    ALI) 
+    ALI)
       flipFlag="-y -x z"
       ;;
-    ALS) 
+    ALS)
       flipFlag="-y -x -z"
       ;;
-    ARI) 
+    ARI)
       flipFlag="y -x z"
       ;;
-    ARS) 
+    ARS)
       flipFlag="y -x -z"
       ;;
 
     #I LR PA
-    ILP) 
+    ILP)
       flipFlag="-y z x"
       ;;
-    ILA) 
+    ILA)
       flipFlag="-y -z x"
       ;;
-    IRP) 
+    IRP)
       flipFlag="y z x"
       ;;
-    IRA) 
+    IRA)
       flipFlag="y -z x"
       ;;
 
     #S LR PA
-    SLP) 
+    SLP)
       flipFlag="-y z -x"
       ;;
-    SLA) 
+    SLA)
       flipFlag="-y -z -x"
       ;;
-    SRP) 
+    SRP)
       flipFlag="y z -x"
       ;;
-    SRA) 
+    SRA)
       flipFlag="y -z -x"
       ;;
 
     #I PA LR
-    IPL) 
+    IPL)
       flipFlag="-z y x"
       ;;
-    IPR) 
+    IPR)
       flipFlag="z y x"
       ;;
-    IAL) 
+    IAL)
       flipFlag="-z -y x"
       ;;
-    IAR) 
+    IAR)
       flipFlag="z -y x"
       ;;
 
     #S PA LR
-    SPL) 
+    SPL)
       flipFlag="-z y -x"
       ;;
-    SPR) 
+    SPR)
       flipFlag="z y -x"
       ;;
-    SAL) 
+    SAL)
       flipFlag="-z -y -x"
       ;;
-    SAR) 
+    SAR)
       flipFlag="z -y -x"
       ;;
     esac
@@ -503,6 +503,7 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
     primSeconDir=YZ
   else
     echo "${primSeconVector} is an unkown Primary/Secondary ordering.  Unable to process EPI data."
+    exit 1
   fi
 
   #Combine the Primary and Secondary Axes, determine the layout to be Coronal, Axial or Sagittal
@@ -561,7 +562,7 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
     elif [[ $dcmOrient == "ROW" ]]; then
       peDir=RL
     else
-      peDir=Unknown    
+      peDir=Unknown
     fi
   elif [[ $scanType == "Sagittal" ]]; then
     if [[ $dcmOrient == "COL" ]]; then
@@ -569,7 +570,7 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
     elif [[ $dcmOrient == "ROW" ]]; then
       peDir=AP
     else
-      peDir=Unknown    
+      peDir=Unknown
     fi
   elif [[ $scanType == "Coronal" ]]; then
     if [[ $dcmOrient == "COL" ]]; then
@@ -577,7 +578,7 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
     elif [[ $dcmOrient == "ROW" ]]; then
       peDir=RL
     else
-      peDir=Unknown    
+      peDir=Unknown
     fi
   else
     peDir=Unknown
@@ -679,7 +680,7 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
 
 
   ### sliceorder ################
-  
+
     #SO=0=Sequential (seq)
     #SO=1=Interleaved (alt)
 
@@ -759,7 +760,7 @@ num_processes=$(cpu_thread_num)
 #0020,1041 : Location of slice in scanner space
 #0021,105e : Acquisition time, per slice of an individual TR (this is not always reliable and often reports as "0")
   #printf '%s\n' "${dcmList[@]}" | xargs -n1 -P ${num_processes} -I {} bash -c 'dicom_hinfo -tag 0020,0013 0020,1041 0021,105e {}' > $outDir/${outBase}_tmpDCM.txt
-printf '%s\n' "${dcmList[@]}" | xargs -n 1 -P ${num_processes} -I {} bash -c 'dicom_hinfo -tag 0020,0013 0020,1041 0021,105e {}' >> $outDir/${outBase}_tmpDCM.txt 
+printf '%s\n' "${dcmList[@]}" | xargs -n 1 -P ${num_processes} -I {} bash -c 'dicom_hinfo -tag 0020,0013 0020,1041 0021,105e {}' >> $outDir/${outBase}_tmpDCM.txt
 
 #sort by slice number
 sort -k2 -n $outDir/${outBase}_tmpDCM.txt > $outDir/${outBase}_sortDCM.txt
@@ -965,7 +966,7 @@ if [ ! -z ${BIDS} ]; then
       \"PhaseEncodingDirection\": ${unwarpdir},
       \"RepetitionTime\": ${TR},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
-}" > $outDir/${dcmSeries}.json
+}" > $outDir/${outBase}.json
    else
      echo "{
       \"Manufacturer\": \"${scanMan}\",
@@ -977,7 +978,7 @@ if [ ! -z ${BIDS} ]; then
       \"EchoTime\": ${TE},
       \"RepetitionTime\": ${TR},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
-}" > ${outDir}/${dcmSeries}.json
+}" > ${outDir}/${outBase}.json
   fi
 fi
 
