@@ -907,6 +907,7 @@ if [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
   mv $outDir/${outBase}${imageExt} $outDir/${outBase}_master${imageExt}
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase}${imageExt} 0 1
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase/fieldmap/magnitude}${imageExt} 1 1
+  rm $outDir/${outBase}_master${imageExt}
 fi
 
 #####################################################################################
