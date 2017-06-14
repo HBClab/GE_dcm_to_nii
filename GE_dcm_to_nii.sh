@@ -900,7 +900,14 @@ if [[ $reorientFlag == 1 ]]; then
   fi
 fi
 
-
+#####################################################################################
+# Special Processing for fieldmaps to make them BIDS compatible (GE)
+#####################################################################################
+if [[ "${dcmSubSeries}" == "ia/stable/B0map" ]]; then
+  mv $outDir/${outBase}${imageExt} $outDir/${outBase}_master${imageExt}
+  fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase}${imageExt} 0 1
+  fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase/fieldmap/magnitude}${imageExt} 0 1
+fi
 
 #####################################################################################
 # Create a log to save information about conversion
@@ -947,12 +954,20 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
   cat $outDir/${outBase}_sortDCM.txt >> $outDir/${outBase}_info.txt
 fi
 
-echo "BIDS: ${BIDS}"
+
 if [ ! -z ${BIDS} ]; then
-  #making a JSON file
-  #Assuming TR and TE are in milliseconds
+  # making a JSON file
+  # Assuming TR and TE are in milliseconds
   TR=$(echo "scale=3; ${dcmTR}/1000" | bc)
   TE=$(echo "scale=10; ${dcmTE}/1000" | bc)
+
+  # change phase encoding direction to i,j,k, and use rev if warp is negative
+  BIDS_unWarpDir=$(echo ${unWarpDir} | sed -e "s|x|i|" -e "s|y|j|" -e "s|z|k|" | rev)
+  # total readout time = 1/pixelbandwidth
+  # tag 0018,0095
+  PixelBandWidth=$(dicom_hinfo -no_name -tag "0018,0095" $dcmPic)
+  # Email Joel about total Readout time
+  TotalReadOutTime=$(echo "1/${PixelBandWidth}" | bc -l)
    if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
       echo "{
       \"Manufacturer\": \"${scanMan}\",
@@ -963,10 +978,21 @@ if [ ! -z ${BIDS} ]; then
       \"FlipAngle\": ${flipAng},
       \"EchoTime\": ${TE},
       \"EffectiveEchoSpacing\": ${echoSpacing},
-      \"PhaseEncodingDirection\": ${unwarpdir},
+      \"PhaseEncodingDirection\": ${BIDS_unWarpDir},
       \"RepetitionTime\": ${TR},
+      \"TotalReadOutTime\": ${TotalReadOutTime},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
 }" > $outDir/${outBase}.json
+  elif [[ "${dcmSubSeries}" == "ia/stable/B0map" ]]; then
+    echo "{
+     \"Manufacturer\": \"${scanMan}\",
+     \"ManufacturersModelName\": \"${scanModel}\",
+     \"RawImage\": false,
+     \"SeriesDescription\": \"${dcmSeries}\",
+     \"MagneticFieldStrength\": ${magSize},
+     \"Units\": \"Hz\",
+     \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
+}" > ${outDir}/${outBase}.json
    else
      echo "{
       \"Manufacturer\": \"${scanMan}\",
