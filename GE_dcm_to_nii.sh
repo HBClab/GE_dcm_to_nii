@@ -906,7 +906,7 @@ fi
 if [[ "${dcmSubSeries}" == "ia/stable/B0map" ]]; then
   mv $outDir/${outBase}${imageExt} $outDir/${outBase}_master${imageExt}
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase}${imageExt} 0 1
-  fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase/fieldmap/magnitude}${imageExt} 0 1
+  fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase/fieldmap/magnitude}${imageExt} 1 1
 fi
 
 #####################################################################################
@@ -967,7 +967,7 @@ if [ ! -z ${BIDS} ]; then
   # tag 0018,0095
   PixelBandWidth=$(dicom_hinfo -no_name -tag "0018,0095" $dcmPic)
   # Email Joel about total Readout time
-  TotalReadOutTime=$(echo "1/${PixelBandWidth}" | bc -l)
+  # TotalReadOutTime=$(echo "1/${PixelBandWidth}" | bc -l)
    if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
       echo "{
       \"Manufacturer\": \"${scanMan}\",
