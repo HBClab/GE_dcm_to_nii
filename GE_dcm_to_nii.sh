@@ -903,7 +903,7 @@ fi
 #####################################################################################
 # Special Processing for fieldmaps to make them BIDS compatible (GE)
 #####################################################################################
-if [[ "${dcmSubSeries}" == "ia/stable/B0map" ]]; then
+if [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
   mv $outDir/${outBase}${imageExt} $outDir/${outBase}_master${imageExt}
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase}${imageExt} 0 1
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase/fieldmap/magnitude}${imageExt} 1 1
@@ -983,7 +983,7 @@ if [ ! -z ${BIDS} ]; then
       \"TotalReadOutTime\": ${TotalReadOutTime},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
 }" > $outDir/${outBase}.json
-  elif [[ "${dcmSubSeries}" == "ia/stable/B0map" ]]; then
+  elif [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
     echo "{
      \"Manufacturer\": \"${scanMan}\",
      \"ManufacturersModelName\": \"${scanModel}\",
