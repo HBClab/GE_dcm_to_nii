@@ -538,7 +538,7 @@ if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
 
   #Pull the dwellTime, uncorrected for Acceleration Factor, from the DICOM header, convert from micro-seconds to seconds
   tmpDwell=`dicom_hdr $dcmPic | grep "0043 102c" | awk -F"//" '{print $NF}' | tr -d '[[:space:]]' | awk '{print $1/1000000}'`
-  echoSpacing=`echo $tmpDwell | awk '{print ($1*1000)}'`
+  echoSpacing=`echo $tmpDwell | awk '{printf "%f", ($1*1000)}'`
   #Pull out the Asset Factor
     #Acceleration Factor = 1/Asset Factor
       #-OR- `gdcmdump -P -i $dcmPic | grep "PHASEACCEL" | awk -F'"' '{print $2}'`
@@ -959,8 +959,8 @@ fi
 if [ ! -z ${BIDS} ]; then
   # making a JSON file
   # Assuming TR and TE are in milliseconds
-  TR=$(echo "scale=3; ${dcmTR}/1000" | bc)
-  TE=$(echo "scale=10; ${dcmTE}/1000" | bc)
+  TR=$(echo "scale=3; ${dcmTR}/1000" | bc | awk '{printf "%f", $0}')
+  TE=$(echo "scale=10; ${dcmTE}/1000" | bc | | awk '{printf "%f", $0}')
 
   # change phase encoding direction to i,j,k, and use rev if warp is negative
   BIDS_unWarpDir=$(echo ${unWarpDir} | sed -e "s|x|i|" -e "s|y|j|" -e "s|z|k|" | rev)
@@ -978,7 +978,7 @@ if [ ! -z ${BIDS} ]; then
       \"SeriesDescription\": \"${dcmSeries}\",
       \"MagneticFieldStrength\": ${magSize},
       \"FlipAngle\": ${flipAng},
-      \"EchoTime\": 0${TE},
+      \"EchoTime\": ${TE},
       \"EffectiveEchoSpacing\": ${echoSpacing},
       \"PhaseEncodingDirection\": \"${BIDS_unWarpDir}\",
       \"RepetitionTime\": ${TR},
@@ -1002,7 +1002,7 @@ if [ ! -z ${BIDS} ]; then
       \"SeriesDescription\": \"${dcmSeries}\",
       \"MagneticFieldStrength\": ${magSize},
       \"FlipAngle\": ${flipAng},
-      \"EchoTime\": 0${TE},
+      \"EchoTime\": ${TE},
       \"RepetitionTime\": ${TR},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
 }" > ${outDir}/${outBase}.json
