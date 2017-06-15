@@ -960,7 +960,7 @@ if [ ! -z ${BIDS} ]; then
   # making a JSON file
   # Assuming TR and TE are in milliseconds
   TR=$(echo "scale=3; ${dcmTR}/1000" | bc | awk '{printf "%f", $0}')
-  TE=$(echo "scale=10; ${dcmTE}/1000" | bc | | awk '{printf "%f", $0}')
+  TE=$(echo "scale=10; ${dcmTE}/1000" | bc | awk '{printf "%f", $0}')
 
   # change phase encoding direction to i,j,k, and use rev if warp is negative
   BIDS_unWarpDir=$(echo ${unWarpDir} | sed -e "s|x|i|" -e "s|y|j|" -e "s|z|k|" | rev)
