@@ -980,7 +980,7 @@ if [ ! -z ${BIDS} ]; then
       \"FlipAngle\": ${flipAng},
       \"EchoTime\": 0${TE},
       \"EffectiveEchoSpacing\": ${echoSpacing},
-      \"PhaseEncodingDirection\": "${BIDS_unWarpDir}",
+      \"PhaseEncodingDirection\": \"${BIDS_unWarpDir}\",
       \"RepetitionTime\": ${TR},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
 }" > $outDir/${outBase}.json
@@ -1002,7 +1002,7 @@ if [ ! -z ${BIDS} ]; then
       \"SeriesDescription\": \"${dcmSeries}\",
       \"MagneticFieldStrength\": ${magSize},
       \"FlipAngle\": ${flipAng},
-      \"EchoTime\": ${TE},
+      \"EchoTime\": 0${TE},
       \"RepetitionTime\": ${TR},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
 }" > ${outDir}/${outBase}.json
