@@ -969,6 +969,7 @@ if [ ! -z ${BIDS} ]; then
   PixelBandWidth=$(dicom_hinfo -no_name -tag "0018,0095" $dcmPic)
   # Email Joel about total Readout time
   # TotalReadOutTime=$(echo "1/${PixelBandWidth}" | bc -l)
+  # add a leading zero in front of EchoTime
    if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
       echo "{
       \"Manufacturer\": \"${scanMan}\",
@@ -977,11 +978,10 @@ if [ ! -z ${BIDS} ]; then
       \"SeriesDescription\": \"${dcmSeries}\",
       \"MagneticFieldStrength\": ${magSize},
       \"FlipAngle\": ${flipAng},
-      \"EchoTime\": ${TE},
+      \"EchoTime\": 0${TE},
       \"EffectiveEchoSpacing\": ${echoSpacing},
-      \"PhaseEncodingDirection\": ${BIDS_unWarpDir},
+      \"PhaseEncodingDirection\": "${BIDS_unWarpDir}",
       \"RepetitionTime\": ${TR},
-      \"TotalReadOutTime\": ${TotalReadOutTime},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
 }" > $outDir/${outBase}.json
   elif [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
