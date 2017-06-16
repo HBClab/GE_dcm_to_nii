@@ -863,6 +863,12 @@ else
     3drefit -orient RAS $outDir/${outBase}.nii.gz
   fi
 
+# Keeping afni info in nifti header caused headaches
+# see: https://afni.nimh.nih.gov/afni/community/board/read.php?1,146771,146771#msg-146771
+# removing afni info from nifti files
+mv $outDir/${outBase}.nii.gz $outDir/tmp_${outBase}.nii.gz
+nifti_tool -rm_ext ALL -infiles $outDir/tmp_${outBase}.nii.gz -prefix $outDir/${outBase}.nii.gz
+
   #If AFNI HEAD/BRIK is desired, convert and remove NIfTI file
   if [[ $imageType == "AFNI" ]]; then
     3dcopy $outDir/${outBase}.nii.gz $outDir/${outBase}
