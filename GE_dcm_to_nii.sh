@@ -914,6 +914,8 @@ if [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase}${imageExt} 0 1
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase/fieldmap/magnitude}${imageExt} 1 1
   rm $outDir/${outBase}_master${imageExt}
+  # fieldmap should be a float not an int
+  fslmaths $outDir/${outBase}${imageExt} $outDir/${outBase}${imageExt} -odt float
 fi
 
 #####################################################################################
