@@ -975,7 +975,7 @@ if [ ! -z ${BIDS} ]; then
   PixelBandWidth=$(dicom_hinfo -no_name -tag "0018,0095" $dcmPic)
   # Email Joel about total Readout time
   # TotalReadOutTime=$(echo "1/${PixelBandWidth}" | bc -l)
-  # add a leading zero in front of EchoTime
+  # The EffectiveEchoSpacing refers to dwell time for processing
    if [[ $dcmSubSeries == "multiband_mux_epi" || $dcmSubSeries == "epiRT" ]]; then
       echo "{
       \"Manufacturer\": \"${scanMan}\",
@@ -985,7 +985,7 @@ if [ ! -z ${BIDS} ]; then
       \"MagneticFieldStrength\": ${magSize},
       \"FlipAngle\": ${flipAng},
       \"EchoTime\": ${TE},
-      \"EffectiveEchoSpacing\": ${echoSpacing},
+      \"EffectiveEchoSpacing\": ${dwellTime},
       \"PhaseEncodingDirection\": \"${BIDS_unWarpDir}\",
       \"RepetitionTime\": ${TR},
       \"ConversionSoftware\": \"GE_dcm_to_nii.sh\"
