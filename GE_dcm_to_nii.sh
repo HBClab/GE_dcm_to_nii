@@ -48,7 +48,7 @@ imageType="NIfTI"
 
 function printCommandLine {
   echo ""
-  echo "Usage: GE_dcm_to_nii.sh -i DICOM_directory -o outputDirectory -b outputBaseName -v -r -a"
+  echo "Usage: GE_dcm_to_nii.sh -i DICOM_directory -o outputDirectory -b outputBaseName -v -r -B -a"
   echo ""
   echo "  e.g.:"
   echo "       GE_dcm_to_nii.sh -i /path/to/DICOM -o /output/directory -b fmri_Visual -v -r -a"
@@ -59,6 +59,7 @@ function printCommandLine {
   echo "       *If this is not specified, this defaults to input DICOM directory"
   echo "   -b Output basename (e.g. fmri_Visual)"
   echo "       *If this is not specified, this will be pulled from 'ID Series Description' in the DICOM header"
+  echo "   -B Output BIDS json file with nii"
   echo "   -v Verbose output"
   echo "       *Additional file information will be logged to Output directory"
   echo "         *This only applies to EPI images"
@@ -867,7 +868,7 @@ else
 # see: https://afni.nimh.nih.gov/afni/community/board/read.php?1,146771,146771#msg-146771
 # removing afni info from nifti files
 #check for afni extensions
-ext_check=$(nifti_tool -disp_ext -infiles $outDir/${outBase}.nii.gz -debug 1 | awk -F"= " '{print $2}')
+ext_check=$(nifti_tool -disp_ext -infiles $outDir/${outBase}.nii.gz -debug 1 | grep num_ext | awk -F"= " '{print $2}')
 echo "extension check: ${ext_check}"
 if [ "${ext_check}" -gt "0" ]; then
   mv $outDir/${outBase}.nii.gz $outDir/tmp_${outBase}.nii.gz
