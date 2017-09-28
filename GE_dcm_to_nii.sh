@@ -864,21 +864,26 @@ else
     3drefit -orient RAS $outDir/${outBase}.nii.gz
   fi
 
-# Keeping afni info in nifti header caused headaches
-# see: https://afni.nimh.nih.gov/afni/community/board/read.php?1,146771,146771#msg-146771
-# removing afni info from nifti files
-#check for afni extensions
-ext_check=$(nifti_tool -disp_ext -infiles $outDir/${outBase}.nii.gz -debug 1 | grep num_ext | awk -F"= " '{print $2}')
-echo "extension check: ${ext_check}"
-if [ "${ext_check}" -gt "0" ]; then
-  mv $outDir/${outBase}.nii.gz $outDir/tmp_${outBase}.nii.gz
-  nifti_tool -rm_ext ALL -infiles $outDir/tmp_${outBase}.nii.gz -prefix $outDir/${outBase}.nii.gz
-fi
+
 
   #If AFNI HEAD/BRIK is desired, convert and remove NIfTI file
   if [[ $imageType == "AFNI" ]]; then
     3dcopy $outDir/${outBase}.nii.gz $outDir/${outBase}
     rm $outDir/${outBase}.nii.gz
+  fi
+fi
+
+# Keeping afni info in nifti header caused headaches
+# see: https://afni.nimh.nih.gov/afni/community/board/read.php?1,146771,146771#msg-146771
+# removing afni info from nifti files
+# check for afni extensions
+
+if [[ $imageType == "NIfTI" ]]; then
+  ext_check=$(nifti_tool -disp_ext -infiles $outDir/${outBase}.nii.gz -debug 1 | grep num_ext | awk -F"= " '{print $2}')
+  echo "extension check: ${ext_check}"
+  if [ "${ext_check}" -gt "0" ]; then
+    mv $outDir/${outBase}.nii.gz $outDir/tmp_${outBase}.nii.gz
+    nifti_tool -rm_ext ALL -infiles $outDir/tmp_${outBase}.nii.gz -prefix $outDir/${outBase}.nii.gz
   fi
 fi
 
