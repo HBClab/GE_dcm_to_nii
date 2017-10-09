@@ -884,6 +884,7 @@ if [[ $imageType == "NIfTI" ]]; then
   if [ "${ext_check}" -gt "0" ]; then
     mv $outDir/${outBase}.nii.gz $outDir/tmp_${outBase}.nii.gz
     nifti_tool -rm_ext ALL -infiles $outDir/tmp_${outBase}.nii.gz -prefix $outDir/${outBase}.nii.gz
+    rm $outDir/tmp_${outBase}.nii.gz
   fi
 fi
 
