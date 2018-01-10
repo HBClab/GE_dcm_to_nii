@@ -910,6 +910,7 @@ if [[ $reorientFlag == 1 ]]; then
   if [[ $dcmSubSeries != "ssfse" ]]; then
     if [[ $imageType == "NIfTI" ]]; then
       RPI_orient $outDir/${outBase}${imageExt}
+      mv $outDir/${outBase}_RPI${imageExt} $outDir/${outBase}${imageExt}
     else
       3dresample -orient rpi -rmode Cu -prefix $outDir/tmp -inset  $outDir/${outBase}+orig
       mv $outDir/tmp+orig.HEAD $outDir/${outBase}+orig.HEAD
@@ -922,9 +923,6 @@ fi
 # Special Processing for fieldmaps to make them BIDS compatible (GE)
 #####################################################################################
 if [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
-    if [[ $reorientFlag == 1 ]]; then
-      mv $outDir/${outBase}_RPI${imageExt} $outDir/${outBase}_master${imageExt}
-    else
       mv $outDir/${outBase}${imageExt} $outDir/${outBase}_master${imageExt}
 
   fslroi $outDir/${outBase}_master${imageExt} $outDir/${outBase}${imageExt} 0 1
