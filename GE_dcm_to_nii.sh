@@ -930,6 +930,16 @@ if [[ "${dcmSubSeries}" == "ia_stable_B0map" ]]; then
   rm $outDir/${outBase}_master${imageExt}
   # fieldmap should be a float32 not an int16
   fslmaths $outDir/${outBase}${imageExt} $outDir/${outBase}${imageExt} -odt float
+
+  #Adjust the fieldMap_Hz to rad/s by multiplying by 6.28 (2*pi=6.28)
+  fslmaths $outDir/${outBase}${imageExt} -mul 6.28 $outDir/${outBase}_prepped${imageExt}
+
+  # https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FUGUE/Guide#Step_5_-_Regularising_the_fieldmap
+  # smooth (1mm), despike, median filter
+  fugue --loadfmap=$outDir/${outBase}_prepped${imageExt} -s 1 --savefmap=$outDir/${outBase}_prepped${imageExt}
+  fugue --loadfmap=$outDir/${outBase}_prepped${imageExt} --despike --savefmap=$outDir/${outBase}_prepped${imageExt}
+  fugue --loadfmap=$outDir/${outBase}_prepped${imageExt} -m --savefmap=$outDir/${outBase}_prepped${imageExt}
+
 fi
 
 #####################################################################################
