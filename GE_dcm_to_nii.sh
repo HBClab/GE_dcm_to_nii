@@ -2,7 +2,7 @@
 
 ###########################################################################
 # Copyright (c) 2017 Vincent A. Magnotta & Joel Bruss
-#   With a strong assist from James Kent!
+#   With a strong assist from James Kent and Timothy Weng!
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms are permitted
